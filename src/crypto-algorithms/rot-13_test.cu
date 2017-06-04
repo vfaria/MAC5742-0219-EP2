@@ -85,7 +85,7 @@ int rot13_test()
 
 int main()
 {
-    printf("ROT-13 tests: %s\n", rot13_test() ? "SUCCEEDED" : "FAILED");
+    printf("ROT-13 tests with CUDA: %s\n", rot13_test() ? "SUCCEEDED" : "FAILED");
 
     return(0);
 }
