@@ -16,7 +16,7 @@ rot-13_cuda: rot-13_test.cu rot-13.cu rot-13.h
 md2: md2_test.c md2.c md2.h
 	$(CC) -o md2 $(CC_OPT) md2_test.c md2.c md2.h
 
-md2_cuda: md2_test.cu md2.cu md2.h
+md2_cuda: md2_test.cu md2.cu md2cu.h
 	$(NVCC) -o md2_cuda $(CC_OPT) md2_test.cu md2.cu 
 
 .PHONY: clean

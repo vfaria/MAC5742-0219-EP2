@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <memory.h>
-#include "md2.h"
+#include "md2cu.h"
 
 /**************************** VARIABLES *****************************/
 static const BYTE s[256] = {
@@ -38,70 +38,72 @@ static const BYTE s[256] = {
 };
 
 /*********************** FUNCTION DEFINITIONS ***********************/
-void md2_transform(MD2_CTX *ctx, BYTE data[])
+void md2_transform(BYTE ctx[], BYTE data[])
 {
     int j,k,t;
 
     //memcpy(&ctx->state[16], data);
     for (j=0; j < 16; ++j) {
-        ctx->state[j + 16] = data[j];
-        ctx->state[j + 32] = (ctx->state[j+16] ^ ctx->state[j]);
+        ctx[MD2_CTX_STATE_OFFSET + j + 16] = data[j];
+        ctx[MD2_CTX_STATE_OFFSET + j + 32] = (ctx[MD2_CTX_STATE_OFFSET + j+16] ^ ctx[MD2_CTX_STATE_OFFSET + j]);
     }
 
     t = 0;
     for (j = 0; j < 18; ++j) {
         for (k = 0; k < 48; ++k) {
-            ctx->state[k] ^= s[t];
-            t = ctx->state[k];
+            ctx[MD2_CTX_STATE_OFFSET + k] ^= s[t];
+            t = ctx[MD2_CTX_STATE_OFFSET + k];
         }
         t = (t+j) & 0xFF;
     }
 
-    t = ctx->checksum[15];
+    t = ctx[MD2_CTX_CHECKSUM_OFFSET + 15];
     for (j=0; j < 16; ++j) {
-        ctx->checksum[j] ^= s[data[j] ^ t];
-        t = ctx->checksum[j];
+        ctx[MD2_CTX_CHECKSUM_OFFSET + j] ^= s[data[j] ^ t];
+        t = ctx[MD2_CTX_CHECKSUM_OFFSET + j];
     }
 }
 
-void md2_init(MD2_CTX *ctx)
+void md2_init(BYTE ctx[], int *ctx_len)
 {
     int i;
 
     for (i=0; i < 48; ++i)
-        ctx->state[i] = 0;
+        ctx[i + MD2_CTX_STATE_OFFSET] = 0;
     for (i=0; i < 16; ++i)
-        ctx->checksum[i] = 0;
-    ctx->len = 0;
+        ctx[i + MD2_CTX_CHECKSUM_OFFSET] = 0;
+    *ctx_len = 0;
 }
 
-void md2_update(MD2_CTX *ctx, const BYTE data[], size_t len)
+void md2_update(BYTE ctx[], int *ctx_len, const BYTE data[], size_t len)
 {
     size_t i;
 
     for (i = 0; i < len; ++i) {
-        ctx->data[ctx->len] = data[i];
-        ctx->len++;
-        if (ctx->len == MD2_BLOCK_SIZE) {
-            printf("Calling md2_transform with context len %d\n", ctx->len);
-            md2_transform(ctx, ctx->data);
-            ctx->len = 0;
+        ctx[*ctx_len] = data[i];
+        *ctx_len = *ctx_len + 1;
+        if (*ctx_len == MD2_BLOCK_SIZE) {
+            printf("Calling md2_transform with context len %d\n", *ctx_len);
+            md2_transform(ctx, ctx);
+            *ctx_len = 0;
         }
     }
 }
 
-void md2_final(MD2_CTX *ctx, BYTE hash[])
+void md2_final(BYTE ctx[], int *ctx_len, BYTE hash[])
 {
     int to_pad;
 
-    to_pad = MD2_BLOCK_SIZE - ctx->len;
+    to_pad = MD2_BLOCK_SIZE - *ctx_len;
     printf("to_pad: %d\n", to_pad);
 
-    while (ctx->len < MD2_BLOCK_SIZE)
-        ctx->data[ctx->len++] = to_pad;
+    while (*ctx_len < MD2_BLOCK_SIZE) {
+        ctx[*ctx_len] = to_pad;
+        *ctx_len = *ctx_len + 1;
+    }
 
-    md2_transform(ctx, ctx->data);
-    md2_transform(ctx, ctx->checksum);
+    md2_transform(ctx, ctx);
+    md2_transform(ctx, &ctx[MD2_CTX_CHECKSUM_OFFSET]);
 
-    memcpy(hash, ctx->state, MD2_BLOCK_SIZE);
+    memcpy(hash, &ctx[MD2_CTX_STATE_OFFSET], MD2_BLOCK_SIZE);
 }
