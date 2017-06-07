@@ -16,7 +16,7 @@
 #include "md2cu.h"
 
 /**************************** VARIABLES *****************************/
-static const BYTE s[256] = {
+__constant__ static const BYTE s[256] = {
     41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 6,
     19, 98, 167, 5, 243, 192, 199, 115, 140, 152, 147, 43, 217, 188,
     76, 130, 202, 30, 155, 87, 60, 253, 212, 224, 22, 103, 66, 111, 24,
@@ -38,7 +38,7 @@ static const BYTE s[256] = {
 };
 
 /*********************** FUNCTION DEFINITIONS ***********************/
-void md2_transform(BYTE ctx[], BYTE data[])
+__device__ void md2_transform(BYTE ctx[], BYTE data[])
 {
     int j,k,t;
 
@@ -64,36 +64,44 @@ void md2_transform(BYTE ctx[], BYTE data[])
     }
 }
 
-void md2_init(BYTE ctx[], int *ctx_len)
+__global__ void md2_init(BYTE ctx[], int *ctx_len)
 {
     int i;
+    printf("Called md2_init\n");
 
-    for (i=0; i < 48; ++i)
+    for (i=0; i < 48; ++i) {
+        // printf("Setting state bit %d (context array position %d)\n", i, i + MD2_CTX_STATE_OFFSET);
         ctx[i + MD2_CTX_STATE_OFFSET] = 0;
-    for (i=0; i < 16; ++i)
+    }
+    for (i=0; i < 16; ++i) {
+        // printf("Setting checksum bit %d (context array position %d)\n", i, i + MD2_CTX_CHECKSUM_OFFSET);
         ctx[i + MD2_CTX_CHECKSUM_OFFSET] = 0;
+    }
+    printf("Setting ctx_len\n");
     *ctx_len = 0;
 }
 
-void md2_update(BYTE ctx[], int *ctx_len, const BYTE data[], size_t len)
+__global__ void md2_update(BYTE ctx[], int *ctx_len, const BYTE data[], size_t len)
 {
     size_t i;
+    printf("Called md2_update\n");
 
     for (i = 0; i < len; ++i) {
         ctx[*ctx_len] = data[i];
         *ctx_len = *ctx_len + 1;
         if (*ctx_len == MD2_BLOCK_SIZE) {
-            printf("Calling md2_transform with context len %d\n", *ctx_len);
+            
             md2_transform(ctx, ctx);
             *ctx_len = 0;
         }
     }
 }
 
-void md2_final(BYTE ctx[], int *ctx_len, BYTE hash[])
+__global__ void md2_final(BYTE ctx[], int *ctx_len, BYTE hash[])
 {
     int to_pad;
 
+    printf("Called md2_final\n");
     to_pad = MD2_BLOCK_SIZE - *ctx_len;
     printf("to_pad: %d\n", to_pad);
 

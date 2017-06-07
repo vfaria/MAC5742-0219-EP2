@@ -30,8 +30,8 @@ typedef struct {
 */
 
 /*********************** FUNCTION DECLARATIONS **********************/
-void md2_init(BYTE ctx[], int *ctx_len);
-void md2_update(BYTE ctx[], int *ctx_len, const BYTE data[], size_t len);
-void md2_final(BYTE ctx[], int *ctx_len, BYTE hash[]);   // size of hash must be MD2_BLOCK_SIZE
+__global__ void md2_init(BYTE ctx[], int *ctx_len);
+__global__ void md2_update(BYTE ctx[], int *ctx_len, const BYTE data[], size_t len);
+__global__ void md2_final(BYTE ctx[], int *ctx_len, BYTE hash[]);   // size of hash must be MD2_BLOCK_SIZE
 
 #endif   // MD2_H
