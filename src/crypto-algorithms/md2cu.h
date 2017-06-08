@@ -16,6 +16,8 @@
 #define MD2_BLOCK_SIZE 16
 
 /**************************** DATA TYPES ****************************/
+// The struct is obsolete, since we will pass data to the device using
+// a BYTE array. We need to define the offsets to the array, though:
 #define MD2_CTX_STATE_OFFSET 16
 #define MD2_CTX_CHECKSUM_OFFSET 64
 typedef unsigned char BYTE;             // 8-bit byte
@@ -30,6 +32,7 @@ typedef struct {
 */
 
 /*********************** FUNCTION DECLARATIONS **********************/
+// Flattened MD2_CTX arguments, array for BYTEs and pointer for len:
 __global__ void md2_init(BYTE ctx[], int *ctx_len);
 __global__ void md2_update(BYTE ctx[], int *ctx_len, const BYTE data[], size_t len);
 __global__ void md2_final(BYTE ctx[], int *ctx_len, BYTE hash[]);   // size of hash must be MD2_BLOCK_SIZE

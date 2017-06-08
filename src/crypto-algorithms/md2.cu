@@ -67,7 +67,6 @@ __device__ void md2_transform(BYTE ctx[], BYTE data[])
 __global__ void md2_init(BYTE ctx[], int *ctx_len)
 {
     int i;
-    printf("Called md2_init\n");
 
     for (i=0; i < 48; ++i) {
         // printf("Setting state bit %d (context array position %d)\n", i, i + MD2_CTX_STATE_OFFSET);
@@ -77,14 +76,12 @@ __global__ void md2_init(BYTE ctx[], int *ctx_len)
         // printf("Setting checksum bit %d (context array position %d)\n", i, i + MD2_CTX_CHECKSUM_OFFSET);
         ctx[i + MD2_CTX_CHECKSUM_OFFSET] = 0;
     }
-    printf("Setting ctx_len\n");
     *ctx_len = 0;
 }
 
 __global__ void md2_update(BYTE ctx[], int *ctx_len, const BYTE data[], size_t len)
 {
     size_t i;
-    printf("Called md2_update\n");
 
     for (i = 0; i < len; ++i) {
         ctx[*ctx_len] = data[i];
@@ -101,9 +98,7 @@ __global__ void md2_final(BYTE ctx[], int *ctx_len, BYTE hash[])
 {
     int to_pad;
 
-    printf("Called md2_final\n");
     to_pad = MD2_BLOCK_SIZE - *ctx_len;
-    printf("to_pad: %d\n", to_pad);
 
     while (*ctx_len < MD2_BLOCK_SIZE) {
         ctx[*ctx_len] = to_pad;
