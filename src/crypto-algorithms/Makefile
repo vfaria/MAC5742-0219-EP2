@@ -1,14 +1,24 @@
-OUTPUT=des
+OUTPUT=rot-13
 
 CC=gcc
+NVCC=nvcc
 CC_OPT=
 
 .PHONY: all
-all: $(OUTPUT)
+all: rot-13 rot-13_cuda md2 md2_cuda
 
-$(OUTPUT): $(OUTPUT)_test.c $(OUTPUT).c $(OUTPUT).h
-	$(CC) -o $(OUTPUT) $(CC_OPT) $(OUTPUT)_test.c $(OUTPUT).c $(OUTPUT).h
+rot-13: rot-13_test.c rot-13.c rot-13.h
+	$(CC) -o rot-13 $(CC_OPT) rot-13_test.c rot-13.c rot-13.h
+
+rot-13_cuda: rot-13_test.cu rot-13.cu rot-13.h
+	$(NVCC) -o rot-13_cuda $(CC_OPT) rot-13_test.cu rot-13.cu 
+
+md2: md2_test.c md2.c md2.h
+	$(CC) -o md2 $(CC_OPT) md2_test.c md2.c md2.h
+
+md2_cuda: md2_test.cu md2.cu md2cu.h
+	$(NVCC) -o md2_cuda $(CC_OPT) md2_test.cu md2.cu 
 
 .PHONY: clean
 clean:
-	rm $(OUTPUT)
+	rm rot-13 rot-13_cuda md2 md2_cuda
