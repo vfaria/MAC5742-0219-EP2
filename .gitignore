@@ -11,3 +11,5 @@ src/crypto-algorithms/rot-13
 src/crypto-algorithms/rot-13_cuda
 src/crypto-algorithms/md2
 src/crypto-algorithms/md2_cuda
+src/crypto-algorithms/base64
+src/crypto-algorithms/base64_cuda
