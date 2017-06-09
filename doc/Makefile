@@ -1,4 +1,4 @@
-BASE_NAME = enunciado_ep2
+BASE_NAME = relatorio_ep2
 
 LATEX     = latex
 PDFLATEX  = pdflatex

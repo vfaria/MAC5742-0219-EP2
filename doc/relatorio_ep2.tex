@@ -1,0 +1,207 @@
+%% This is file `elsarticle-template-1-num.tex',
+%%
+%% Copyright 2009 Elsevier Ltd
+%%
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%%
+%% $Id: elsarticle-template-1-num.tex 149 2009-10-08 05:01:15Z rishi $
+%% $URL: http://lenova.river-valley.com/svn/elsbst/trunk/elsarticle-template-1-num.tex $
+%%
+\documentclass[final,12pt,a4paper]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% The graphicx package provides the includegraphics command.
+\usepackage{graphicx}
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{sourcecodepro}
+\usepackage{url}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage{multirow}
+\usepackage{textcomp}
+\usepackage{caption}
+
+\definecolor{Accent}{HTML}{157FFF}
+
+\lstdefinestyle{customMtheme}{%
+  backgroundcolor={},
+  basicstyle=\ttfamily\scriptsize,
+  breakatwhitespace=true,
+  breaklines=true,
+  captionpos=n,
+  commentstyle=\color{orange},
+  escapeinside={\%*}{*)},
+  extendedchars=true,
+  frame=n,
+  keywordstyle=\color{Accent},
+  language=C++,
+  rulecolor=\color{black},
+  showspaces=false,
+  showstringspaces=false,
+  xleftmargin=.5cm,
+  xrightmargin=.5cm,
+  showtabs=false,
+  stepnumber=2,
+  stringstyle=\color{gray},
+  tabsize=4,
+  keywords={void, int, float, main,
+  if, else, malloc, NULL,
+  fprintf, stderr, for, make, gcc, o, Enter, Ctrl},
+  otherkeywords={\#pragma, \#include, \&, \*, +, -, /, [, ], >, <, \$, \., std\=c11}
+}
+\lstset{basicstyle=\ttfamily\scriptsize,style=customMtheme}
+
+\renewcommand*{\UrlFont}{\ttfamily\scriptsize\relax}
+
+\graphicspath{{./img/}}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+%% \usepackage{lineno}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{comma,round}
+
+% \biboptions{}
+
+%% Removing lines when no abstract is given
+\makeatletter
+\renewcommand{\MaketitleBox}{%
+    \resetTitleCounters
+        \def\baselinestretch{1}%
+        \begin{center}
+    \def\baselinestretch{1}%
+        \Large \@title \par
+        \vskip 18pt
+        \normalsize\elsauthors \par
+        \vskip 10pt
+        \footnotesize \itshape \elsaddress \par
+        \end{center}
+    \vskip 12pt
+}
+\makeatother
+
+%% Removing custom footer on fist page
+\makeatletter
+\def\ps@pprintTitle{%
+    \let\@oddhead\@empty
+        \let\@evenhead\@empty
+        \def\@oddfoot{\centerline{\thepage}%
+        }%
+    \let\@evenfoot\@oddfoot
+}%
+\makeatother
+
+\journal{MAC 5742-0219 Introdução à Programação Concorrente, Paralela e Distribuída}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+\title{EP2: Criptografia em GPUs usando CUDA}
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+\author{Victor O. F. Faria (8515919), Gustavo Covas (7995052), Mauricio Luiz Abreu Cardoso (6796479)}
+
+\address{MAC 5742-0219 Introdução à Programação Concorrente, Paralela e Distribuída}
+
+\end{frontmatter}
+
+%%
+%% Start line numbering here if you want
+%%
+%% \linenumbers
+
+%% main text
+\section{Introdução}
+
+
+\section{Algoritmos escolhidos}
+
+\subsection{ROT-13}
+Escolhemos esse algoritmo devido à sua simplicidade. Como o algoritmo é trivialmente paralelizável, na nossa implementação em CUDA cada thread codifica um único caracter da string.
+
+\subsection{MD2}
+Para implementar a versão em \textit{CUDA}, decidimos simplificar a struct \texttt{MD2\_CTX} para facilitar a alocação de memória na GPU utilizando o \texttt{cudaMalloc} (Não conseguimos alocar um vetor de structs). Sendo assim, os arrays de \texttt{BYTE}s \texttt{ctx->data}, \texttt{ctx->state} e \texttt{ctx->checksum} foram concatenados em um único array de \texttt{BYTE}s, e os acessos aos dados antes armazenados por aqueles arrays é feito utilizando offsets calculados para o array único. 
+Ao final desse processo, percebemos que o algoritmo MD2 não é paralelizável de forma fácil, pois o cálculo do digest de um pedaço da mensagem depende especificamente dos \texttt{BYTE}s de estado determinados pelo cálculo das partes anteriores. Assim, entregamos uma versão sequencial que roda na GPU, utilizando apenas um único thread. Provavelmente seu desempenho é inferior a uma implementação usando a GPU.
+
+\subsection{Base64}
+
+Base64
+
+\end{document}
+
+%%
+%% End of file `elsarticle-template-1-num.tex'.
