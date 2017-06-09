@@ -147,7 +147,7 @@
 
 %% Title, authors and addresses
 
-\title{EP2: Criptografia e Hashing em GPGPUs usando CUDA}
+\title{EP2: Criptografia e Hashing em GPUs usando CUDA}
 
 %% use the tnoteref command within \title for footnotes;
 %% use the tnotetext command for the associated footnote;
@@ -204,15 +204,11 @@ Ao final desse processo, percebemos que o algoritmo MD2 não é paralelizável d
 
 \subsection{Base64}
 
-Base64
-
 Aqui temos um algoritmo cuja paralelização em \textit{CUDA} foi interessante. Entretanto, antes de continuarmos devemos informar que não finalizamos completamente sua implementação - acabamos ficando travados após a codificação da função de encode e acabamos por fim descobrindo que o algoritmo original também não correspondia à saida presente no código e assim o abandonamos. Contudo houve o aprendizado de uma paralelização não trivial, como descrito abaixo.
 
 Fora alguns casos especiais de borda, os quais foram delegados trivialmente a Threads específicas, o trecho principal de código dividia a saida codificada em pedaços de 76 caracteres (break line) por convenção. Neste momento tivemos que pensar como decidir quais das threads deveriam inserir as quebras de linhas e como essas quebras de linha impactariam onde as demais threads deveriam inserir os caracteres de saída no buffer. Por exemplo, dada uma entrada qualquer cuja saída possua 760 caracteres (sem quebras de linha), não seria possível dividir trivialmente em 10 threads e cada uma escrevendo em uma posição fixa no buffer de saida.
 
 A solução para tanto foi ao invés de contabilizar as quebras de linha iterativamente como na versão orignal, matematizar o problema e derivarmos onde seriam as quebras de linha através de aritmética básica e a partir daí manter um contador para cada thread dizendo quantas quebras de linha já foram colocadas no buffer antes dessa thread escrever. Assim sendo, por exemplo a thread que cuida de escrever os caracteres 77 a 80 da sequência de saída, os escreveria nas posições 78 a 81 do buffer pois $\floor*{\frac{77}{76}} = 1$ e analogamente para os demais.
-
-
 
 \end{document}
 

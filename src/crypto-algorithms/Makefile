@@ -27,4 +27,4 @@ base64_cuda: base64_test.cu base64.cu base64cu.h
 
 .PHONY: clean
 clean:
-	rm rot-13 rot-13_cuda md2 md2_cuda
+	rm rot-13 rot-13_cuda md2 md2_cuda base64 base64_cuda
